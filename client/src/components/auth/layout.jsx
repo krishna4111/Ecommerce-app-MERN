@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
-  console.log("auth layout rendered");
   return (
     <div className="flex min-h-screen w-full">
       <div className="lg:flex items-center justify-center bg-black w-1/2 px-12 ">
