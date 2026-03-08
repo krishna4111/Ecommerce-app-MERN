@@ -3,8 +3,10 @@ import { Navigate, useLocation } from "react-router-dom";
 
 // In here the children prop is the component that we have to render.
 
-const CheckAuth = ({ isAuthenticated, user, childeren }) => {
+const CheckAuth = ({ isAuthenticated, user, children }) => {
   const location = useLocation();
+
+  console.log("entered into check auth");
 
   if (
     !isAuthenticated &&
@@ -41,8 +43,7 @@ const CheckAuth = ({ isAuthenticated, user, childeren }) => {
   ) {
     return <Navigate to="/admin/dashboard" />;
   }
-
-  return <>{childeren}</>;
+  return <>{children}</>;
 };
 
 export default CheckAuth;
