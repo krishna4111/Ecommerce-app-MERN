@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const routes = require("./routes/index");
 
 const app = express();
 const { PORT = 3005, DB_URL } = process.env;
@@ -24,6 +25,8 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
+
+app.use("/api", routes);
 
 (async () => {
   try {
