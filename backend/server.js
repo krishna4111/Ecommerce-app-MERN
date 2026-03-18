@@ -33,7 +33,7 @@ app.use("/api", routes);
     await mongoose.connect(DB_URL);
     console.log("Db connected successfully!!!");
   } catch (error) {
-    console.log(`Error when connecting to db :${error}`);
+    console.error(`Error when connecting to db :${error}`);
   }
 })();
 
