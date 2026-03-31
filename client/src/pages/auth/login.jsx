@@ -1,7 +1,10 @@
 import CommonForm from "@/components/common/form";
 import { loginFormControls } from "@/config";
+import { loginUser } from "@/store/auth-slice";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const initialState = {
   email: "",
@@ -9,9 +12,28 @@ const initialState = {
 };
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState(initialState);
 
-  const onSubmit = () => {};
+  const onSubmit = async (event) => {
+    event.preventDefault();
+
+    const loginResponse = await dispatch(loginUser(formData));
+
+    if (loginResponse?.payload?.success) {
+      toast.success(loginResponse?.payload?.message);
+      if (loginResponse?.payload?.user?.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/shop/home");
+      }
+    } else {
+      toast.error(
+        loginResponse?.payload?.message || "Login Failed Wrong credentials",
+      );
+    }
+  };
 
   return (
     <div className="mx-auto w-full max-w-md space-y-6">

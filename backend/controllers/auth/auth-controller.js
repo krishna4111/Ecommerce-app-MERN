@@ -13,9 +13,9 @@ const registerUser = async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(409).json({
-        success: true,
-        message: "User is already exists",
+      return res.status(200).json({
+        success: false,
+        message: "User is already exists with the same email please try again",
       });
     }
 
@@ -52,9 +52,9 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
-        message: "User not found",
+        message: "Invalid email or password",
       });
     }
 
@@ -63,21 +63,30 @@ const login = async (req, res) => {
     if (!compareHashedPassword) {
       return res.status(401).json({
         success: false,
-        message: "Wrong Password ",
+        message: "Invalid email or password",
       });
     }
 
     const userData = {
       userId: user.id,
       email: user.email,
+      role: user.role,
     };
 
-    const token = jwt.sign(userData, process.env.JWT_SECRET_KEY);
+    const token = jwt.sign(userData, process.env.JWT_SECRET_KEY, {
+      expiresIn: "60m",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, //true in production (HTTPS)
+      maxAge: 60 * 60 * 1000, //1 hour
+    });
 
     return res.status(200).json({
       success: true,
       message: "User login successfully!!!",
-      token,
+      user: userData,
     });
   } catch (error) {
     console.error("Error when login", error);

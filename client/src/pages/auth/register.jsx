@@ -25,6 +25,9 @@ const Register = () => {
     if (registerResponse?.payload?.success) {
       toast.success(registerResponse?.payload?.message);
       navigate("/auth/login");
+    } else {
+      console.log("register response", registerResponse);
+      toast.warning(registerResponse?.payload?.message);
     }
   };
 
