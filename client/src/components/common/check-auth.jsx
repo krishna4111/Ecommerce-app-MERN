@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 // In here the children prop is the component that we have to render.

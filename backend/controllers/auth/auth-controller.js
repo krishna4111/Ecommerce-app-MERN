@@ -101,6 +101,10 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
+    res.clearCookie("token").json({
+      success: true,
+      message: "logged out successfully",
+    });
   } catch (error) {
     console.error("Error when logout");
     res.status(500).json({
@@ -110,10 +114,31 @@ const logout = async (req, res) => {
   }
 };
 
-//
+//auth Middleware it will used when ever a user refresh the page.
+const authMiddleware = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized user",
+    });
+  }
+  try {
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error("Error in auth middleware", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
 
 module.exports = {
   registerUser,
   login,
   logout,
+  authMiddleware,
 };
