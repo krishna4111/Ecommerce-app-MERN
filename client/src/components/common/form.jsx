@@ -1,7 +1,12 @@
 import React from "react";
-import { SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { Textarea } from "../ui/textarea";
-import { Select } from "radix-ui";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -54,17 +59,20 @@ const CommonForm = ({
             <SelectTrigger className="w-full">
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
-            <selectContent>
+            <SelectContent>
               {controlItem.options && controlItem.options.length > 0
                 ? controlItem.options.map((optionItem) => {
                     return (
-                      <SelectItem key={optionItem.id} value={optionItem.id}>
+                      <SelectItem
+                        key={optionItem.label}
+                        value={optionItem.value}
+                      >
                         {optionItem.label}
                       </SelectItem>
                     );
                   })
                 : null}
-            </selectContent>
+            </SelectContent>
           </Select>
         );
         break;
@@ -82,6 +90,12 @@ const CommonForm = ({
               })
             }
           ></Textarea>
+        );
+        break;
+
+      case "file":
+        element = (
+          <Input name={name} type="file" className="cursor-pointer"></Input>
         );
         break;
 
@@ -109,7 +123,7 @@ const CommonForm = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 pl-4">
         {formControls.map((controlItem) => {
           return (
             <div key={controlItem.name} className="grid w-full gap-1.5">
@@ -119,7 +133,7 @@ const CommonForm = ({
           );
         })}
       </div>
-      <Button type="submit" className="mt-2 w-full">
+      <Button type="submit" className="mt-2 w-full pl-4">
         {buttonText || "Submit"}
       </Button>
     </form>
